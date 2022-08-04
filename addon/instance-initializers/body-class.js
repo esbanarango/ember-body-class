@@ -1,6 +1,6 @@
 /* eslint-disable ember/no-get, ember/no-observers, prettier/prettier */
 import { on } from '@ember/object/evented';
-import { observer, set } from '@ember/object';
+import { observer, set, get } from '@ember/object';
 import Route from '@ember/routing/route';
 import { getOwner } from '@ember/application';
 import { addClass, removeClass } from '../util/bodyClass';
@@ -15,7 +15,7 @@ export function initialize() {
 
   Route.reopen({
     classNames: [],
-    bodyClasses: null,
+    bodyClasses: [],
 
     init() {
       this._super(...arguments);
@@ -24,7 +24,7 @@ export function initialize() {
     },
 
     _getRouteDepthClasses() {
-      let routeParts = this.get('routeName').split('.');
+      let routeParts = get(this,'routeName').split('.');
       let routeDepthClasses = routeParts.slice(0);
       let currentSelector = [];
 
@@ -44,7 +44,7 @@ export function initialize() {
     _setClassNamesOnBodyElement() {
       const { body } = getOwner(this).lookup('service:-document');
       ['bodyClasses', 'classNames'].forEach((classes) => {
-        this.get(classes).forEach(function(klass) {
+        get(this, classes).forEach(function(klass) {
           addClass(body, klass);
         });
       });
@@ -60,7 +60,7 @@ export function initialize() {
       const { body } = getOwner(this).lookup('service:-document');
 
       ['bodyClasses', 'classNames'].forEach((classes) => {
-        this.get(classes).forEach(function(klass) {
+        get(this, classes).forEach(function(klass) {
           removeClass(body, klass);
         });
       });
@@ -77,7 +77,7 @@ export function initialize() {
       const { body } = getOwner(this).lookup('service:-document');
 
       ['bodyClasses', 'classNames'].forEach((classes) => {
-        this.get(classes).forEach(function(klass) {
+        get(this, classes).forEach(function(klass) {
           removeClass(body, klass)
         });
       });
